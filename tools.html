@@ -1,0 +1,205 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <style>
+            .wrap {
+                margin: 10 10 10 10;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                border: 1px solid white;
+                padding: 20px;
+            }
+            input:hover {
+                background-color: white;
+                color: black;
+            }
+            .dimension {
+                display: inline-block;
+                margin: 10 0 10 0;
+                border: 1px solid white;
+                padding: 20px;
+            }
+            main > div{
+                border: 1px solid white;
+                margin: 10 20% 10 20%;
+            }
+        </style>
+    </head>
+    <body>
+        <navbar>
+            <a href="index.html">HOME</a>
+            <a href="tools.html">TOOLS</a>
+            <a>ABOUT</a>
+            <a>CONTACT</a>
+        </navbar>
+        <main>
+            <div class="test">
+                <div>
+                    <h1>TEST GENERATOR</h1><br>
+                    DIMENSIONS<br>
+                    <input type="number" id="testDimensions" value="1" min="1" onclick="updateDimensions(this)"><br>
+                    LENGTH<br>
+                    <input type="text" id="testLength" value="10"><br><br>
+                </div>
+                <div class="dimensions">
+                    <div class="dimension">
+                        MIN<br>
+                        <input type="text" value="0"><br><br>
+                        MAX<br>
+                        <input type="text" value="10"><br><br>
+                        TYPE
+                        <select name="type">
+                            <option value="int">INT</option>
+                            <option value="intString">INT STRING</option>
+                            <option value="float">FLOAT</option>
+                            <option value="char">CHAR</option>
+                            <option value="string">STRING</option>
+                            <!--
+                                float string
+                                char(lower), char(uppre), char (mixed)
+                                string(lower), string(upper), string(mixed)
+                            -->
+                        </select>
+                    </div><!--remove whitespace
+                --></div>
+                <div>
+                    <input type="submit" value="GENERATE" onclick="generate()"><br>
+                    <p class="wrap" id="testResult">[]</p>
+                </div>
+            </div>
+            <div>
+                <h1>INPUT SORTER (TODO)</h1><br>
+            </div>
+            <div>
+                <h1>FETCH (TODO)</h1><br>
+            </div>
+        </main>
+        <script>
+            updateDimensions(document.getElementById("testDimensions"))
+            function updateDimensions(input){
+                const container = document.querySelector(".dimensions")
+                let currentDimensions = container.children.length
+                const targetDimensions = parseInt(input.value);
+                const dimensionElement = container.children[0];// 1 child will always exist
+                while(container.children.length < targetDimensions){
+                    const clonedDimension = dimensionElement.cloneNode(true);
+                    container.append(clonedDimension);
+                }
+                while(container.children.length > targetDimensions){
+                    const lastChild = container.children[container.children.length-1];
+                    container.removeChild(lastChild);
+                }
+            }
+
+            function getRandomInt(min, max) {
+                return Math.round(Math.random() * (max - min)) + min;
+            }
+            function getRandomFloat(min, max) {
+                return (Math.random() * (max - min)) + min;
+            }
+            function getRandomChar() {
+                return String.fromCharCode(getRandomInt(97, 122));// lower case
+            }
+            function getRandomString(min, max){
+                let s = "";
+                const length = getRandomInt(min, max);
+                for(let i = 0; i < length; i++){
+                    s += getRandomChar();
+                }
+                return s;
+            }
+            function testValue(min, max, type){
+                if (type === "float"){
+                    return getRandomFloat(min, max);
+                } else if(type === "char"){
+                    return getRandomChar();
+                } else if(type === "string"){
+                    return getRandomString(min, max);
+                } else {
+                    return getRandomInt(min, max);
+                }    
+            }
+            function generate(){
+                const nDimensions = parseInt(document.getElementById("testDimensions").value);
+                if(nDimensions > 1){
+                    generate2();
+                    return;
+                }
+                const p = document.getElementById("testResult");
+                const length = parseInt(document.getElementById("testLength").value);
+
+                const container = document.querySelector(".dimension");
+                const options = container.querySelectorAll("input");
+                const min = parseInt(options[0].value);
+                const max = parseInt(options[1].value);
+                const type = container.querySelector("select").value;
+                
+                let arr = [];
+                for(let i = 0; i < length; i++){
+                    arr.push(testValue(min, max, type));      
+                }
+                let joinedString;
+                if(type === "intString" || type === "char" ||type === "string"){
+                    joinedString = arr.map(str => `"${str}"`).join(",");
+                } else if (type === "float") {
+                    joinedString = arr.map(float => float.toFixed(2)).join(",");
+                } else if(type === "int"){
+                    joinedString = arr.map(int => `${int}`).join(",");
+                }
+                //p.textContent = "[" + joinedString + "]"
+                updateElementText(p, "[" + joinedString + "]")
+            }
+            function generate2(){
+                const nDimensions = parseInt(document.getElementById("testDimensions").value);
+                const p = document.getElementById("testResult");
+                const length = parseInt(document.getElementById("testLength").value);
+                let arr = [];
+                for(let i = 0; i < length; i++){
+                    let subArr = [];
+                    for(let j = 0; j < nDimensions; j++){
+                        const container = document.querySelector(".dimensions").children[j];
+                        const options = container.querySelectorAll("input");
+                        const min = parseInt(options[0].value);
+                        const max = parseInt(options[1].value);
+                        const type = container.querySelector("select").value; 
+                        subArr.push(testValue(min, max, type));   
+                    }
+                    arr.push(subArr);
+                }
+                let joinedString = "";
+                for(let i = 0; i < length; i++){
+                    let subString = "";
+                    for(let j = 0; j < nDimensions; j++){
+                        let container = document.querySelector(".dimensions").children[j];
+                        let type = container.querySelector("select").value;  
+                        if(type === "intString" || type === "char" ||type === "string"){
+                            subString += `"${arr[i][j]}",`
+                        } else if (type === "float") {
+                            subString += arr[i][j].toFixed(2) + ","
+                        } else if(type === "int"){
+                            subString += arr[i][j] + ","
+                        }
+                    }
+                    subString = subString.slice(0, -1);// remove last ','
+                    joinedString += "[" + subString + "],";
+                }
+                joinedString = joinedString.slice(0, -1);// remove last ','
+                //p.textContent = "[" + joinedString + "]"
+                updateElementText(p, "[" + joinedString + "]")
+            }
+            async function updateElementText(element, text){
+                /*element.textContent = "";
+                for(let i = 0; i < text.length; i++){
+                    //element.textContent += text[i];
+                    await type(text[i], element);
+                }*/
+                element.textContent = text;
+            }
+            function type(letter, el, delay = 1) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => resolve (el.textContent += letter), delay);
+                })
+	        }
+        </script>
+    </body>
+</html>

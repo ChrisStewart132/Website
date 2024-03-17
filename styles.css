@@ -1,0 +1,26 @@
+*{
+    background-color: black;
+    color: white;     
+    margin: 0;
+    font-family: Lucida Console;
+}
+body {
+    text-align: center;
+}
+navbar > a {
+    display: inline-block;
+    border: 1px solid white;
+    padding: 14px;
+    font-size: 30px;
+    width: 200px;
+}
+navbar > a:hover {
+    background-color: white;
+    color: black;
+}
+main{
+    margin-top: 10px;
+}
+footer{
+    margin-top: 10px;
+}
