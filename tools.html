@@ -28,18 +28,20 @@
     <body>
         <navbar>
             <a href="index.html">HOME</a>
-            <a href="tools.html">TOOLS</a>
-            <a>ABOUT</a>
-            <a>CONTACT</a>
         </navbar>
         <main>
+            <div>
+                <h1>CONSOLE (TODO)</h1><br>
+                <!--
+                -->
+            </div>
             <div class="test">
                 <div>
                     <h1>TEST GENERATOR</h1><br>
                     DIMENSIONS<br>
                     <input type="number" id="testDimensions" value="1" min="1" onclick="updateDimensions(this)"><br>
                     LENGTH<br>
-                    <input type="text" id="testLength" value="10"><br><br>
+                    <input type="number" id="testLength" value="10" min="1"><br><br>
                 </div>
                 <div class="dimensions">
                     <div class="dimension">
@@ -52,11 +54,11 @@
                             <option value="int">INT</option>
                             <option value="intString">INT STRING</option>
                             <option value="float">FLOAT</option>
+                            <option value="floatString">FLOAT STRING</option>
                             <option value="char">CHAR</option>
                             <option value="string">STRING</option>
                             <!--
-                                float string
-                                char(lower), char(uppre), char (mixed)
+                                char(lower), char(upper), char (mixed)
                                 string(lower), string(upper), string(mixed)
                             -->
                         </select>
@@ -69,9 +71,22 @@
             </div>
             <div>
                 <h1>INPUT SORTER (TODO)</h1><br>
+                <!--
+                    sort array 
+                    sort sub arrays
+                    compare function options (ASC DSC by index i if multi dimensional else index 0) / user input?
+                -->
             </div>
             <div>
                 <h1>FETCH (TODO)</h1><br>
+                <!--
+                    Get
+                    Head
+                    Post
+                    Put
+                    Remove
+                    etc
+                -->
             </div>
         </main>
         <script>
@@ -109,13 +124,13 @@
                 return s;
             }
             function testValue(min, max, type){
-                if (type === "float"){
+                if (type === "float" || type === "floatString"){
                     return getRandomFloat(min, max);
                 } else if(type === "char"){
                     return getRandomChar();
                 } else if(type === "string"){
                     return getRandomString(min, max);
-                } else {
+                } else {// int intString
                     return getRandomInt(min, max);
                 }    
             }
@@ -143,6 +158,8 @@
                     joinedString = arr.map(str => `"${str}"`).join(",");
                 } else if (type === "float") {
                     joinedString = arr.map(float => float.toFixed(2)).join(",");
+                }else if (type === "floatString") {
+                    joinedString = arr.map(float =>  `"${float.toFixed(2)}"`).join(",");
                 } else if(type === "int"){
                     joinedString = arr.map(int => `${int}`).join(",");
                 }
@@ -176,7 +193,9 @@
                             subString += `"${arr[i][j]}",`
                         } else if (type === "float") {
                             subString += arr[i][j].toFixed(2) + ","
-                        } else if(type === "int"){
+                        }else if (type === "floatString") {
+                            subString += `"${arr[i][j].toFixed(2)}",`;
+                        }else if(type === "int"){
                             subString += arr[i][j] + ","
                         }
                     }
