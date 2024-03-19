@@ -9,7 +9,7 @@
                 border: 1px solid white;
                 padding: 20px;
             }
-            input:hover {
+            input:hover, select:hover {
                 background-color: white;
                 color: black;
             }
@@ -42,13 +42,14 @@
                     <input type="number" id="testDimensions" value="1" min="1" onclick="updateDimensions(this)"><br>
                     LENGTH<br>
                     <input type="number" id="testLength" value="10" min="1"><br><br>
+                    <!-- constraints e.g. push if x != 3, or xi > xi-1 etc -->
                 </div>
                 <div class="dimensions">
                     <div class="dimension">
                         MIN<br>
-                        <input type="text" value="0"><br><br>
+                        <input type="number" value="0"><br><br>
                         MAX<br>
-                        <input type="text" value="10"><br><br>
+                        <input type="number" value="10"><br><br>
                         TYPE
                         <select name="type">
                             <option value="int">INT</option>
@@ -70,7 +71,11 @@
                 </div>
             </div>
             <div>
-                <h1>INPUT SORTER (TODO)</h1><br>
+                <h1>INPUT SORTER</h1><br>
+                compare(a, b)<br><input style="width:50%; text-align: center;" type="text" value="parseInt(a[0]) > parseInt(b[0]) || parseInt(a[0]) == parseInt(b[0]) && a[1].length > b[1].length" id="sortCompare" title="e.g. a>b or parseInt(a)>parseInt(b) or a[0] > b[0] or a.length < b.length etc"><br><br>
+                input<br><input type="text" value="[]" id="sortInput"><br><br>
+                <input type="submit" value="SORT" onclick="sort()"><br>
+                <p class="wrap" id="sortResult">[]</p>
                 <!--
                     sort array 
                     sort sub arrays
@@ -90,6 +95,44 @@
             </div>
         </main>
         <script>
+            // input sorter
+            function sort(){
+                let input = document.getElementById("sortInput").value.slice(1,-1);// slice first and last brackets
+                //input = input.replace(" ", "")// remove all spaces
+                //console.log("input:" + input)
+                const sortCompare = document.getElementById("sortCompare").value;
+                //console.log("compare: return " + sortCompare);
+
+                if(input[0] === "["){// converting matrix string to js matrix/2d arr
+                    var arr = []
+                    input.split("],").forEach((row) => {
+                        row = row.replace("[", "");
+                        row = row.replace("]", "");
+                        arr.push(row.split(","))
+                    })
+                }else{
+                    var arr = input.split(",")// convert comma seperated string into an arr
+                }
+                //console.log(arr)
+                const sortedArr = arr.sort((a, b) => {return eval(sortCompare)})
+                //console.log(sortedArr)
+                const p = document.getElementById("sortResult");
+                if(typeof(arr[0]) == "object"){
+                    //console.log("matrix")
+                    let output = ""
+                    sortedArr.forEach((row) => {
+
+                        output += "[" + row + "],";
+                    })
+                    p.textContent = "[" + output.slice(0,-1) + "]";
+                }else{
+                    //console.log("arr")
+                    p.textContent = "[" + sortedArr + "]";
+                }            
+            }
+
+
+            // test generator
             updateDimensions(document.getElementById("testDimensions"))
             function updateDimensions(input){
                 const container = document.querySelector(".dimensions")
