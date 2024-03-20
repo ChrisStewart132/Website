@@ -1,0 +1,106 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <style>
+            main > div{
+                border: 1px solid white;
+                margin: 10 20% 10 20%;
+            }
+            pre {
+                display: none;
+                text-align: left;
+                margin: 10 33% 10 33%;
+            }
+            h1{
+                border: 1px solid white;
+            }
+            h1:hover{
+                background-color: white;
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <navbar>
+            <a href="index.html">HOME</a>
+        </navbar>
+        <main>
+            <div>
+                <h1 onclick="showCode(this)">SELECTION SORT</h1>
+                <pre>
+void selection_sort(int* nums, int numsSize) {
+    for(int i = 0; i < numsSize; i++){
+        int* ptr = &nums[i];
+        for(int j = i+1; j < numsSize; j++){
+            if(nums[j] < *ptr){
+                ptr = &nums[j];
+            }
+        }
+        int temp = nums[i];
+        nums[i] = *ptr;
+        *ptr = temp;
+    }
+}
+                </pre>
+            </div>
+        
+            <div>
+                <h1 onclick="showCode(this)">INSERTION SORT</h1>
+                <pre>
+void insertion_sort(int* nums, int numsSize){
+    for(int i = 1; i < numsSize; i++){
+        int j = i;
+        int current = nums[j];
+        while(j > 0 && nums[j-1] > current){
+            nums[j] = nums[j-1];
+            j--;
+        }
+        nums[j] = current;
+    }
+}
+                </pre>
+            </div>
+
+            <div>
+                <h1 onclick="showCode(this)">COUNTING SORT</h1>
+                <pre>
+
+                </pre>
+            </div>
+
+            <div>
+                <h1 onclick="showCode(this)">MERGE SORT</h1>
+                <pre>
+
+                </pre>
+            </div>
+
+            <div>
+                <h1 onclick="showCode(this)">QUICK SORT</h1>
+                <pre>
+
+                </pre>
+            </div>
+
+            <div>
+                <h1 onclick="showCode(this)">HEAP SORT</h1>
+                <pre>
+
+                </pre>
+            </div>
+
+        </main>
+
+        <script>
+            function showCode(header){
+                const parentDiv = header.parentNode;
+                const pre = parentDiv.querySelector("pre")
+                if(pre.style.display === 'block'){
+                    pre.style.display = 'none'
+                }else{
+                    pre.style.display = 'block'
+                }
+            }
+        </script>
+    </body>
+</html>
