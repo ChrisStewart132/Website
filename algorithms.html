@@ -9,7 +9,7 @@
             pre {
                 display: none;
                 text-align: left;
-                margin: 10 33% 10 33%;
+                margin: 10 13% 10 13%;
             }
             h1{
                 border: 1px solid white;
@@ -26,6 +26,12 @@
         </navbar>
         <main>
             <div>
+                <select>
+                    <option value="C" selected>C</option>
+                    <option value="python">python</option>
+                </select>
+
+                
                 <h1 onclick="showCode(this)">SELECTION SORT</h1>
                 <pre>
 void selection_sort(int* nums, int numsSize) {
@@ -64,14 +70,70 @@ void insertion_sort(int* nums, int numsSize){
             <div>
                 <h1 onclick="showCode(this)">COUNTING SORT</h1>
                 <pre>
-
+int* countingBuffer(int* nums, int numsSize, int min, int max, int* returnSize){
+    // create a buffer of max-min+1 length
+    *returnSize = max-min+1;
+    int* buffer = (int*)calloc((returnSize[0]), sizeof(int));
+    // key=n-min and buffer[key] = count of n in nums
+    for(int i = 0;i < numsSize; i++){
+        buffer[nums[i]-min] += 1;
+    }
+    return buffer;
+}
+void countingSort(int* nums, int numsSize, int min, int max){
+    // create a buffer of max-min+1 length
+    int bufferSize;
+    int* buffer = countingBuffer(nums, numsSize, min, max, &bufferSize);
+    // re-write nums given the order and counts of each n
+    int j = 0;
+    for(int i = 0; i < bufferSize; i++){
+        while(buffer[i] > 0){
+            nums[j] = min+i;
+            buffer[i]--;
+            j++;
+        }
+    }
+    free(buffer);
+}
                 </pre>
             </div>
 
             <div>
                 <h1 onclick="showCode(this)">MERGE SORT</h1>
                 <pre>
+int* merge(int lc, int* l, int rc, int* r) {
+    int* output = malloc(sizeof(*l) * (lc + rc));
+    int i = 0;
+    int j = 0;
+    while(i < lc && j < rc){
+        if(l[i] < r[j]){
+            output[i+j] = l[i];
+            i++;
+        }else{
+            output[i+j] = r[j];
+            j++;
+        }
+    }
+    while(i < lc){
+        output[i+j] = l[i];
+        i++;
+    }
+    while(j < rc){
+        output[i+j] = r[j];
+        j++;
+    }
+    return output;
+}
 
+int* mergeSort(int* nums, int numsSize) {
+    if (numsSize <= 1) {
+        return nums;
+    }
+    int mid = numsSize / 2;
+    int* left = mergeSort(nums, mid);
+    int* right = mergeSort(nums + mid, numsSize - mid);
+    return merge(mid, left, numsSize - mid, right);
+}
                 </pre>
             </div>
 
@@ -85,10 +147,74 @@ void insertion_sort(int* nums, int numsSize){
             <div>
                 <h1 onclick="showCode(this)">HEAP SORT</h1>
                 <pre>
+void swap(int* nums, int i, int j){
+    int temp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = temp;
+}
+bool compare(int a, int b){
+    return a > b;
+}
+void siftDown(int* heap, int heapSize, int p){
+    if(p >= heapSize){
+        return;
+    }
+    int smallest = p;
+    int nChildren = 2;// binary heap
+    for(int c = p*2+1; c < heapSize && c < p*2+1+nChildren; c++){
+        smallest = compare(heap[smallest], heap[c]) ? smallest : c;
+    }
+    if(smallest != p){
+        swap(heap, p, smallest);
+        siftDown(heap, heapSize, smallest);
+    }
+}
+void heapify(int* nums, int numsSize){
+    for(int p = numsSize/2 + numsSize%2 - 1; p > -1; p--){
+        siftDown(nums, numsSize, p);
+    }
+}
+void heapSort(int* nums, int numsSize){
+    heapify(nums, numsSize);
+    int heapSize = numsSize;
+    for(int i = 0; i < numsSize-1; i++){
+        swap(nums, 0, heapSize-1);// swap max value to the tail
+        heapSize--; // heapSize represents the unsorted partition
+        siftDown(nums, heapSize, 0);// sift down the swapped head
+    }
+}
+                </pre>
+            </div>
+            <div>
+                <h1 onclick="showCode(this)">BINARY SEARCH</h1>
+                <pre>
 
                 </pre>
             </div>
+            <div>
+                <h1 onclick="showCode(this)">PRIORITY QUEUE</h1>
+                <pre>
 
+                </pre>
+            </div>
+            <div>
+                <h1 onclick="showCode(this)">BACK-TRACKING</h1>
+                <pre>
+
+                </pre>
+            </div>
+            <div>
+                <h1 onclick="showCode(this)">TREE-TRAVERSAL</h1>
+                <pre>
+
+                </pre>
+            </div>
+            <div>
+                <h1 onclick="showCode(this)">X</h1>
+                <pre>
+
+                </pre>
+            </div>
         </main>
 
         <script>
