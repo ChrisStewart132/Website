@@ -10,6 +10,7 @@
                 display: none;
                 text-align: left;
                 margin: 10 13% 10 13%;
+                white-space: pre-wrap;
             }
             h1{
                 border: 1px solid white;
@@ -33,6 +34,7 @@
 
                 
                 <h1 onclick="showCode(this)">SELECTION SORT</h1>
+                
                 <pre>
 void selection_sort(int* nums, int numsSize) {
     for(int i = 0; i < numsSize; i++){
@@ -47,6 +49,13 @@ void selection_sort(int* nums, int numsSize) {
         *ptr = temp;
     }
 }
+
+
+def selection_sort(arr):
+    for i in range(len(arr)-1):
+        min_idx = i+arr[i:].index(min(arr[i:]))
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr
                 </pre>
             </div>
         
@@ -64,6 +73,16 @@ void insertion_sort(int* nums, int numsSize){
         nums[j] = current;
     }
 }
+
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        current = arr[i]
+        j = i - 1
+        while j > -1 and arr[j] > current:
+            arr[j+1] = arr[j]
+            j -= 1
+        arr[j+1] = current   
+    return arr
                 </pre>
             </div>
 
@@ -95,6 +114,23 @@ void countingSort(int* nums, int numsSize, int min, int max){
     }
     free(buffer);
 }
+
+def counting_sort(arr):
+    cache={}
+    for num in arr:
+        if num in cache:
+            cache[num] += 1
+        else:
+            cache[num] = 1
+    smallest = min(cache.keys())
+    largest = max(cache.keys())
+    index = 0
+    for i in range(smallest, largest+1):
+        while i in cache and cache[i] > 0:
+            cache[i]-=1
+            arr[index]=i
+            index+=1
+    return arr
                 </pre>
             </div>
 
@@ -212,7 +248,12 @@ void heapSort(int* nums, int numsSize){
             <div>
                 <h1 onclick="showCode(this)">X</h1>
                 <pre>
+                    <code>
+def greet(name):
+    return f"Hello, {name}!"
 
+print(greet("World"))
+                    </code>
                 </pre>
             </div>
         </main>
