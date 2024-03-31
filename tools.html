@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="styles.css">
         <style>
             .wrap {
-                margin: 10 10 10 10;
+                margin: 10 40 40 40;
                 word-wrap: break-word;
                 overflow-wrap: break-word;
                 border: 1px solid white;
@@ -20,15 +20,19 @@
                 padding: 20px;
             }
             main > div{
-                border: 1px solid white;
-                margin: 10 20% 10 20%;
+                border: 10px solid white;
+                margin: 80 20% 10 20%;
             }
         </style>
     </head>
+
+
+
     <body>
         <navbar>
             <a href="index.html">HOME</a>
         </navbar>
+
         <main>
             <div class="test">
                 <div>
@@ -65,6 +69,8 @@
                     <p class="wrap" id="testResult">[]</p>
                 </div>
             </div>
+
+
             <div>
                 <h1>INPUT SORTER</h1><br>
                 compare(a, b)<br><input style="width:50%; text-align: center;" type="text" value="parseInt(a[0]) > parseInt(b[0]) || parseInt(a[0]) == parseInt(b[0]) && a[1].length > b[1].length" id="sortCompare" title="e.g. a>b or parseInt(a)>parseInt(b) or a[0] > b[0] or a.length < b.length etc"><br><br>
@@ -77,19 +83,83 @@
                     compare function options (ASC DSC by index i if multi dimensional else index 0) / user input?
                 -->
             </div>
+
+
             <div>
-                <h1>FETCH (TODO)</h1><br>
-                <!--
-                    Get
-                    Head
-                    Post
-                    Put
-                    Remove
-                    etc
-                -->
+                <h1>FETCH</h1><br>
+                TYPE
+                <select name="type" id="fetchType">
+                    <option value="head">HEAD</option>
+                    <option value="get" selected>GET</option>
+                    <option value="post">POST</option>
+                    <option value="put">PUT</option>
+                    <option value="delete">DELETE</option>
+                    <option value="patch">PATCH</option>
+                </select>
+                URL
+                <input type="text" value="https://data-asg.goldprice.org/dbXRates/NZD" style="width:50%; text-align: center;" id="fetchURL"><br><br>
+                DATA
+                <input type="text" value="{}" id="fetchData" style="width:50%; text-align: center;" >
+                <input type="submit" value="FETCH" onclick="fetchRequest(this)"><br><br>
+                <!--REQUEST HEADER
+                <p class="wrap" id="requestHeader">{}</p>
+                REQUEST DATA
+                <p class="wrap" id="requestData">{}</p> -->
+                RESPONSE HEADER
+                <p class="wrap" id="responseHeader">{}</p>
+                RESPONSE DATA
+                <p class="wrap" id="responseData">{}</p>
+            </div>
+
+            <div style="height: 500px; border: none;">
+
             </div>
         </main>
+
+
+
+
+
         <script>
+            // fetch requester
+            function fetchRequest(inputElement){
+                const type = document.getElementById("fetchType").value;
+                const url = document.getElementById("fetchURL").value;
+                const data = document.getElementById("fetchData").value;
+                console.log(type, url, data)
+                options = {
+                    method: type, // *GET, POST, PUT, DELETE, etc. 
+                }
+                if(type != "get" && type != "head"){
+                    options["headers"] = {
+                    //"Content-Type": "text/html",
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    
+                    }
+                    options[body] = JSON.stringify(data) // body data type must match "Content-Type" header
+                }
+
+                /*const requestHeader = document.getElementById("requestHeader");
+                requestHeader.textContent = JSON.stringify(options["headers"])
+                const requestData = document.getElementById("requestData");
+                requestData.textContent = JSON.stringify(options["body"])
+                console.log(options["body"])*/
+
+                fetch(url, options).then((response) => {
+                    console.log('Response status:', response.status);
+                    if(response.headers){
+                        const responseHeader = document.getElementById("responseHeader")
+                        responseHeader.textContent = JSON.stringify(response.headers)
+                    } 
+                    return response.json(); // Returns a Promise that resolves with the JSON body content
+                }).then((data) => {
+                    console.log(data);
+                    const responseData = document.getElementById("responseData")
+                    responseData.textContent = JSON.stringify(data)
+                })
+            }
+
             // input sorter
             function sort(){
                 let input = document.getElementById("sortInput").value.slice(1,-1);// slice first and last brackets
