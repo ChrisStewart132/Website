@@ -126,6 +126,10 @@
                 const type = document.getElementById("fetchType").value;
                 const url = document.getElementById("fetchURL").value;
                 const data = document.getElementById("fetchData").value;
+                const responseHeader = document.getElementById("responseHeader")
+                const responseData = document.getElementById("responseData")
+                responseHeader.textContent=""
+                responseData.textContent=""
                 console.log(type, url, data)
                 options = {
                     method: type, // *GET, POST, PUT, DELETE, etc. 
@@ -148,14 +152,17 @@
 
                 fetch(url, options).then((response) => {
                     console.log('Response status:', response.status);
+                    console.log('Response:', response);
                     if(response.headers){
-                        const responseHeader = document.getElementById("responseHeader")
-                        responseHeader.textContent = JSON.stringify(response.headers)
+                        console.log('Headers:', response.headers);
+                        let headersStr =""
+                        const keys = response.headers.keys()
+                        response.headers.forEach((v,k) => headersStr+=`"${k}":"${v}", `)
+                        responseHeader.textContent = headersStr
                     } 
                     return response.json(); // Returns a Promise that resolves with the JSON body content
                 }).then((data) => {
                     console.log(data);
-                    const responseData = document.getElementById("responseData")
                     responseData.textContent = JSON.stringify(data)
                 })
             }
