@@ -9,7 +9,7 @@ body {
 }
 navbar > a {
     display: inline-block;
-    border: 1px solid white;
+    border: 0px solid white;
     padding: 14px;
     font-size: 30px;
     width: 200px;

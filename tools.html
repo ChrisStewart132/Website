@@ -3,10 +3,10 @@
         <link rel="stylesheet" href="styles.css">
         <style>
             .wrap {
-                margin: 10 40 40 40;
+                margin: 10 40 10 40;
                 word-wrap: break-word;
                 overflow-wrap: break-word;
-                border: 1px solid white;
+                border: 0px solid white;
                 padding: 20px;
             }
             input:hover, select:hover {
@@ -20,8 +20,9 @@
                 padding: 20px;
             }
             main > div{
-                border: 10px solid white;
+                border: 1px solid white;
                 margin: 80 20% 10 20%;
+                padding: 20px;
             }
         </style>
     </head>
@@ -89,26 +90,61 @@
                 <h1>FETCH</h1><br>
                 TYPE
                 <select name="type" id="fetchType">
-                    <option value="head">HEAD</option>
                     <option value="get" selected>GET</option>
+                    <option value="head">HEAD</option>
                     <option value="post">POST</option>
                     <option value="put">PUT</option>
-                    <option value="delete">DELETE</option>
                     <option value="patch">PATCH</option>
+                    <option value="delete">DELETE</option>
+                    <option value="options">OPTIONS</option>
                 </select>
                 URL
-                <input type="text" value="https://data-asg.goldprice.org/dbXRates/NZD" style="width:50%; text-align: center;" id="fetchURL"><br><br>
+                <input type="text" value="https://data-asg.goldprice.org/dbXRates/NZD" style="width:74%; text-align: center;" id="fetchURL"><br><br>                 
                 DATA
-                <input type="text" value="{}" id="fetchData" style="width:50%; text-align: center;" >
+                <input type="text" value='{"key1":"str", "arr1":["item1", 3.14, false], "obj1":{"key1": null}}' id="fetchData" style="width:80%; text-align: center;" >
                 <input type="submit" value="FETCH" onclick="fetchRequest(this)"><br><br>
-                <!--REQUEST HEADER
-                <p class="wrap" id="requestHeader">{}</p>
-                REQUEST DATA
-                <p class="wrap" id="requestData">{}</p> -->
                 RESPONSE HEADER
                 <p class="wrap" id="responseHeader">{}</p>
                 RESPONSE DATA
                 <p class="wrap" id="responseData">{}</p>
+                <details>
+                    <summary>HTTP Method Summary</summary>
+                        <h1>GET</h1>
+                        <p>
+                            The GET method requests that the target resource transfer a representation of its state. GET requests should only retrieve data and should have no other effect. (This is also true of some other HTTP methods.)[1] For retrieving resources without making changes, GET is preferred over POST, as they can be addressed through a URL. This enables bookmarking and sharing and makes GET responses eligible for caching, which can save bandwidth. The W3C has published guidance principles on this distinction, saying, "Web application design should be informed by the above principles, but also by the relevant limitations."[53] See safe methods below.
+                        </p><br>
+                        <h1>HEAD</h1>
+                        <p>
+                            The HEAD method requests that the target resource transfer a representation of its state, as for a GET request, but without the representation data enclosed in the response body. This is useful for retrieving the representation metadata in the response header, without having to transfer the entire representation. Uses include checking whether a page is available through the status code and quickly finding the size of a file (Content-Length).
+                        </p><br>
+                        <h1>POST</h1>
+                        <p>The POST method requests that the target resource process the representation enclosed in the request according to the semantics of the target resource. For example, it is used for posting a message to an Internet forum, subscribing to a mailing list, or completing an online shopping transaction.[54]
+                        </p><br>
+                        <h1>PUT</h1>
+                        <p>
+                            The PUT method requests that the target resource create or update its state with the state defined by the representation enclosed in the request. A distinction from POST is that the client specifies the target location on the server.[55]
+                        </p><br>
+                        <h1>DELETE</h1>
+                        <p>
+                            The DELETE method requests that the target resource delete its state.
+                        </p><br>
+                        <h1>CONNECT</h1>
+                        <p>
+                            The CONNECT method requests that the intermediary establish a TCP/IP tunnel to the origin server identified by the request target. It is often used to secure connections through one or more HTTP proxies with TLS.[56][57] See HTTP CONNECT method.
+                        </p><br>
+                        <h1>OPTIONS</h1>
+                        <p>
+                            The OPTIONS method requests that the target resource transfer the HTTP methods that it supports. This can be used to check the functionality of a web server by requesting '*' instead of a specific resource.
+                        </p><br>
+                        <h1>TRACE</h1>
+                        <p>
+                            The TRACE method requests that the target resource transfer the received request in the response body. That way a client can see what (if any) changes or additions have been made by intermediaries.
+                        </p><br>
+                        <h1>PATCH</h1>
+                        <p>
+                            The PATCH method requests that the target resource modify its state according to the partial update defined in the representation enclosed in the request. This can save bandwidth by updating a part of a file or document without having to transfer it entirely.
+                        </p><br>
+                </details><br> 
             </div>
 
             <div style="height: 500px; border: none;">
@@ -134,22 +170,16 @@
                 options = {
                     method: type, // *GET, POST, PUT, DELETE, etc. 
                 }
-                if(type != "get" && type != "head"){
+                if(["post", "put", "patch"].includes(type)){
                     options["headers"] = {
                     //"Content-Type": "text/html",
                     "Content-Type": "application/json",
                     // 'Content-Type': 'application/x-www-form-urlencoded',
                     
                     }
-                    options[body] = JSON.stringify(data) // body data type must match "Content-Type" header
+                    options["body"] = (data) // body data type must match "Content-Type" header
                 }
-
-                /*const requestHeader = document.getElementById("requestHeader");
-                requestHeader.textContent = JSON.stringify(options["headers"])
-                const requestData = document.getElementById("requestData");
-                requestData.textContent = JSON.stringify(options["body"])
-                console.log(options["body"])*/
-
+                console.log(`options: ${JSON.stringify(options)}`)
                 fetch(url, options).then((response) => {
                     console.log('Response status:', response.status);
                     console.log('Response:', response);
@@ -160,6 +190,9 @@
                         response.headers.forEach((v,k) => headersStr+=`"${k}":"${v}", `)
                         responseHeader.textContent = headersStr
                     } 
+                    if(options.method == 'head'){
+                        return null// return empty response for HEAD requests
+                    }
                     return response.json(); // Returns a Promise that resolves with the JSON body content
                 }).then((data) => {
                     console.log(data);
