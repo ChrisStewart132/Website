@@ -35,6 +35,19 @@
         </navbar>
 
         <main>
+            <div>
+                <h1>TODO LIST</h1><br>
+                <span>input</span><input type="text" value="task" id="todoInput">
+                <input type="submit" value="ADD TASK"
+                 onclick="addTask(document.getElementById(`todoInput`), document.getElementById(`todoList`))"
+                 onkeydown="(event)=>{
+                    console.log(event)
+                    if(event.keyCode == 13){
+                        addTask(document.getElementById(`todoInput`), document.getElementById(`todoList`));
+                    }
+                }"><br>
+                <div class="wrap" id="todoList"></div>
+            </div>
             <div class="test">
                 <div>
                     <h1>TEST GENERATOR</h1><br>
@@ -71,6 +84,29 @@
                 </div>
             </div>
 
+            <div class="combinatorics">
+                <div>
+                    <h1>COMBINATORICS</h1><br>
+                    <details>
+                        <summary>COMBINATORICS SUMMARY</summary>
+                        <br><p><h1>Variations</h1> involve selecting or arranging elements from a set where the order matters.</p><br>
+                        <p><h1>Permutations</h1> involve arranging all the elements of a set in all possible orders.</p><br>
+                        <p><h1>Combinations</h1> involve selecting elements from a set where the order does not matter.</p>  <br>           
+                    </details><br>   
+                    <select name="type" id="combinatoricsSetting">
+                        <option value="variations">VARIATIONS</option>
+                        <option value="permutations">PERMUTATIONS</option>
+                        <option value="combinations">COMBINATIONS</option>
+                    </select><br><br>
+                    MAX LENGTH<br>
+                    <input type="number" id="combinatoricsLength" value="4" min="1" max="10"><br><br>
+                </div>
+                <input type="text" value="0,1" id="combinatoricsSymbols"><br><br>
+                <div>
+                    <input type="submit" value="GENERATE" onclick="generateCombinatorics()"><br>
+                    <p class="wrap" id="combinatoricsResult">[]</p>
+                </div>
+            </div>
 
             <div>
                 <h1>INPUT SORTER</h1><br>
@@ -157,6 +193,32 @@
 
 
         <script>
+            // todo list
+            function addTask(taskInputElement, listElement){
+                //<input type="submit" value="REMOVE TASK"
+                 //onclick="addTask(document.getElementById(`todoInput`), document.getElementById(`todoList`))"><br>
+                
+                const removeElement = document.createElement(`input`);
+                removeElement.type = "submit";
+                removeElement.value = "REMOVE";
+                removeElement.onclick = function(){
+                    this.parentElement.remove();
+                };
+
+                const taskElement = document.createElement(`span`);
+                taskElement.textContent = taskInputElement.value;
+                taskElement.style.margin = "30px"
+
+                const divElement = document.createElement(`div`);
+                divElement.style.textAlign = "left"
+                divElement.style.marginLeft = "33%"
+                divElement.append(removeElement)
+                divElement.append(taskElement)
+                listElement.append(divElement)
+
+                taskInputElement.value = ""
+            }
+
             // fetch requester
             function fetchRequest(inputElement){
                 const type = document.getElementById("fetchType").value;
@@ -236,11 +298,94 @@
                 }            
             }
 
+            // combinatorics
+            function variations(symbols, max_length, output, starting_candidate=""){
+                let stack = [starting_candidate]
+                while(stack.length > 0){
+                    let candidate = stack.pop()
+                    if(candidate.length > max_length){
+                        continue
+                    }
+                    output.push(candidate);
+                    for(let i = 0; i < symbols.length; i++){
+                        let child_candidate = candidate + symbols[i]
+                        stack.push(child_candidate)
+                    }
+                }
+            }
+            function permutations(symbols, max_length, output, starting_candidate=""){
+                let stack = [starting_candidate]
+                while(stack.length > 0){
+                    let candidate = stack.pop()
+                    if(candidate.length > max_length){
+                        continue
+                    }
+                    output.push(candidate);
+                    for(let i = 0; i < symbols.length; i++){
+                        if(!candidate.includes(symbols[i])){
+                            let child_candidate = candidate + symbols[i]
+                            stack.push(child_candidate)
+                        }
+                    }
+                }
+            }
+            function setsAreEqual(set1, set2) {
+                if (set1.size !== set2.size) {
+                    return false;
+                }
+                for (let item of set1) {
+                    if (!set2.has(item)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            function combinations(symbols, max_length, output, starting_candidate="") {
+                let p = []
+                permutations(symbols, max_length, p, starting_candidate)
+                p.shift()
+                for(const candidate of p){
+                    let s1 = new Set(candidate)
+                    let add = true
+                    for(const e of output){
+                        let s2 = new Set(e)
+                        console.log(s2)
+                        if(setsAreEqual(s1,s2)){
+                            add = false
+                            break
+                        }
+                    }
+                    if(add){
+                        output.push(candidate)
+                    }
+                }
+            }
+            function generateCombinatorics(){
+                const p = document.getElementById("combinatoricsResult");
+                const max_length = parseInt(document.getElementById("combinatoricsLength").value);
+                const setting = document.getElementById("combinatoricsSetting").value
+                const symbols = (document.getElementById("combinatoricsSymbols").value).split(",")
+
+                let arr = [];
+                if(setting == "variations"){
+                    variations(symbols, max_length, arr)
+                }else if(setting == "permutations"){
+                    permutations(symbols, max_length, arr)
+                }else if(setting == "combinations"){
+                    combinations(symbols, max_length, arr)
+                }
+                arr.shift(); // Removes the first empty element
+                console.log(arr)
+                //let joinedString = arr.toString();
+                let joinedString = arr.map(str => `"${str}"`).join(",");
+                updateElementText(p, "[" + joinedString + "]")
+            }
+
 
             // test generator
             updateDimensions(document.getElementById("testDimensions"))
             function updateDimensions(input){
-                const container = document.querySelector(".dimensions")
+                const container = (document.querySelector(".test")).querySelector(".dimensions")
                 let currentDimensions = container.children.length
                 const targetDimensions = parseInt(input.value);
                 const dimensionElement = container.children[0];// 1 child will always exist
@@ -253,7 +398,6 @@
                     container.removeChild(lastChild);
                 }
             }
-
             function getRandomInt(min, max) {
                 return Math.round(Math.random() * (max - min)) + min;
             }
@@ -281,7 +425,7 @@
                 } else {// int intString
                     return getRandomInt(min, max);
                 }    
-            }
+            }        
             function generate(){
                 const nDimensions = parseInt(document.getElementById("testDimensions").value);
                 if(nDimensions > 1){
@@ -291,7 +435,7 @@
                 const p = document.getElementById("testResult");
                 const length = parseInt(document.getElementById("testLength").value);
 
-                const container = document.querySelector(".dimension");
+                const container = (document.querySelector(".test")).querySelector(".dimension");
                 const options = container.querySelectorAll("input");
                 const min = parseInt(options[0].value);
                 const max = parseInt(options[1].value);
@@ -322,7 +466,7 @@
                 for(let i = 0; i < length; i++){
                     let subArr = [];
                     for(let j = 0; j < nDimensions; j++){
-                        const container = document.querySelector(".dimensions").children[j];
+                        const container = (document.querySelector(".test")).querySelector(".dimensions").children[j];
                         const options = container.querySelectorAll("input");
                         const min = parseInt(options[0].value);
                         const max = parseInt(options[1].value);
@@ -335,7 +479,7 @@
                 for(let i = 0; i < length; i++){
                     let subString = "";
                     for(let j = 0; j < nDimensions; j++){
-                        let container = document.querySelector(".dimensions").children[j];
+                        let container = (document.querySelector(".test")).querySelector(".dimensions").children[j];
                         let type = container.querySelector("select").value;  
                         if(type === "intString" || type === "char" ||type === "string"){
                             subString += `"${arr[i][j]}",`
