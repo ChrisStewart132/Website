@@ -13,6 +13,7 @@ function addTask(taskString, listElement, reset=true){
     const removeElement = document.createElement(`input`);
     removeElement.type = "checkbox";
     removeElement.value = "REMOVE";
+    removeElement.className = "checkbox"
     removeElement.onclick = function(){
         if(!this.checked){// clicking unchecks it then it can be deleted
             localStorage.setItem(taskString, "0")
@@ -28,20 +29,62 @@ function addTask(taskString, listElement, reset=true){
     // create task text
     const taskElement = document.createElement(`span`);
     taskElement.textContent = taskString;
-    taskElement.style.margin = "30px"
+    taskElement.style.margin = "10px"
     // create/append task container with its childen to the task list
     const divElement = document.createElement(`div`);
-    divElement.style.textAlign = "left"
-    divElement.style.marginLeft = "33%"
+    divElement.onclick = function(event){
+        if(event.target.type == "checkbox"){
+            return;
+        }
+        const taskString = this.querySelector(`span`).textContent
+        const taskPriorityString = taskString + "priority"
+        if(this.classList.contains(`taskDefaultPriority`)){
+            this.classList.remove(`taskDefaultPriority`);
+            this.classList.add(`taskLowPriority`);
+            localStorage.setItem(taskPriorityString, "taskLowPriority")
+        }
+        else if(this.classList.contains(`taskLowPriority`)){
+            this.classList.remove(`taskLowPriority`);
+            this.classList.add(`taskMediumPriority`);
+            localStorage.setItem(taskPriorityString, "taskMediumPriority")
+        }
+        else if(this.classList.contains(`taskMediumPriority`)){
+            this.classList.remove(`taskMediumPriority`);
+            this.classList.add(`taskHighPriority`);
+            localStorage.setItem(taskPriorityString, "taskHighPriority")
+        }
+        else if(this.classList.contains(`taskHighPriority`)){
+            this.classList.remove(`taskHighPriority`);
+            this.classList.add(`taskDefaultPriority`);
+            localStorage.setItem(taskPriorityString, "taskDefaultPriority")
+        }
+    }
+    divElement.classList.add("task")
     divElement.append(removeElement)
     divElement.append(taskElement)
     listElement.append(divElement)
 
+    // reset input
     document.getElementById("todoInput").value = ""
-    if(reset)
+    // creating a new task
+    if(reset){
+        divElement.classList.add(`taskDefaultPriority`);
         localStorage.setItem(taskString, "0")
-    else{
+        localStorage.setItem(taskString + "priority", "taskDefaultPriority")
+    }else{// loading a cached task
         removeElement.checked = localStorage.getItem(taskString) === "1"
+        divElement.classList.add(localStorage.getItem(taskString + "priority"))
     }
 
+}
+function uncheckAll(listElement){
+    if(!confirm("Are you sure you want to un-check all tasks?")){
+        return;
+    }
+    for(const taskDiv of listElement.children){
+        const checkbox = taskDiv.querySelector(`input`)
+        const taskStr = taskDiv.querySelector(`span`).textContent
+        checkbox.checked = false;
+        localStorage.setItem(taskStr, "0")
+      }
 }

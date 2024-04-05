@@ -1,6 +1,9 @@
 <html>
     <head>
+        <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="styles.css">
+        <title>TOOLS</title>
         <style>
             .wrap {
                 margin: 10 40 10 40;
@@ -24,6 +27,44 @@
                 margin: 80 20% 10 20%;
                 padding: 20px;
             }
+            .checkBox{
+                width: 20px;
+                height: 20px;
+            }
+            .task {
+                display: inline-block;
+                max-width: 300px;
+                height: 100px;
+                text-align: left;
+                vertical-align: top;
+                border: 1px solid white;
+                margin: 10px;
+                padding: 10px;
+                user-select: none; /* Disable text selection */
+            }
+            .task > span {
+                background-color: rgba(255, 255, 255, 0.0);
+            }
+            .task:hover{
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            .taskDefaultPriority{
+                background-color: black;
+                color: white;
+            }
+            .taskLowPriority{
+                background-color: rgba(0, 100, 0, 0.657);
+                color: white;
+            }
+            .taskMediumPriority{
+                background-color: rgba(184, 135, 11, 0.664);
+                color: white;
+            }
+            .taskHighPriority{
+                background-color: rgba(139, 0, 0, 0.628);
+                color: white;
+            }
+            
         </style>
     </head>
 
@@ -36,16 +77,19 @@
 
         <main>
             <div>
-                <h1>TODO LIST</h1><br>
-                <input type="text" value="task" id="todoInput">
-                <input type="submit" value="ADD TASK"
-                 onclick="addTask(document.getElementById(`todoInput`).value, document.getElementById(`todoList`))"
-                 onkeydown="(event)=>{
-                    console.log(event)
-                    if(event.keyCode == 13){
-                        addTask(document.getElementById(`todoInput`), document.getElementById(`todoList`));
-                    }
-                }"><br>
+                <div>
+                    <h1>TODO LIST</h1><br>
+                    <input type="text" value="task" id="todoInput">
+                    <input type="submit" value="ADD TASK"
+                    onclick="addTask(document.getElementById(`todoInput`).value, document.getElementById(`todoList`))"
+                    onkeydown="(event)=>{
+                        console.log(event)
+                        if(event.keyCode == 13){
+                            addTask(document.getElementById(`todoInput`), document.getElementById(`todoList`));
+                        }
+                    }">
+                    <input type="submit" value="UNCHECK ALL" onclick="uncheckAll(document.getElementById(`todoList`))"><br>
+                </div>
                 <div class="wrap" id="todoList"></div>
             </div>
 
@@ -103,9 +147,9 @@
                     </select><br><br>
                     MAX LENGTH<br>
                     <input type="number" id="combinatoricsLength" value="4" min="1" max="10"><br><br>
+                    SYMBOLS<br>
+                    <input type="text" value="0,1" id="combinatoricsSymbols"><br><br>
                 </div>
-                SYMBOLS<br>
-                <input type="text" value="0,1" id="combinatoricsSymbols"><br><br>
                 <div>
                     <input type="submit" value="GENERATE" onclick='
                         generateCombinatorics((document.getElementById("combinatoricsSymbols").value).split(","),
