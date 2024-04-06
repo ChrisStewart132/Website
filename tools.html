@@ -88,7 +88,8 @@
                             addTask(document.getElementById(`todoInput`), document.getElementById(`todoList`));
                         }
                     }">
-                    <input type="submit" value="UNCHECK ALL" onclick="uncheckAll(document.getElementById(`todoList`))"><br>
+                    <input type="submit" value="UNCHECK ALL" onclick="uncheckAllTasks(document.getElementById(`todoList`))">
+                    <input type="submit" value="REMOVE ALL" onclick="removeAllTasks(document.getElementById(`todoList`))"><br>
                 </div>
                 <div class="wrap" id="todoList"></div>
             </div>

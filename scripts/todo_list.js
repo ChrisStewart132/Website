@@ -1,4 +1,5 @@
 loadTasks(document.getElementById("todoList"))
+loadDefaultTasks(document.getElementById("todoList"))
 function loadTasks(listElement){
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -76,8 +77,8 @@ function addTask(taskString, listElement, reset=true){
         divElement.classList.add(localStorage.getItem(taskString + "priority"))
     }
 
-}
-function uncheckAll(listElement){
+}loadDefaultTasks
+function uncheckAllTasks(listElement){
     if(!confirm("Are you sure you want to un-check all tasks?")){
         return;
     }
@@ -87,4 +88,33 @@ function uncheckAll(listElement){
         checkbox.checked = false;
         localStorage.setItem(taskStr, "0")
       }
+}
+function removeAllTasks(listElement){
+    if(!confirm("Are you sure you want to remove all tasks?")){
+        return;
+    }
+    for(const taskDiv of listElement.children){  
+        const taskStr = taskDiv.querySelector(`span`).textContent
+        const taskPriortyStr = taskStr + "priority"
+        console.log(taskStr)
+        localStorage.removeItem(taskStr)// remove the tasks uncheck status
+        localStorage.removeItem(taskPriortyStr)// remove the tasks priority status
+    }
+    while (listElement.firstChild) {
+        listElement.removeChild(listElement.firstChild);
+    }
+}
+function loadDefaultTasks(listElement){
+    // only load default tasks if no tasks exist
+    if(listElement.children.length > 0){
+        return
+    }
+
+    // load some default tasks to show-case use
+    addTask("click container to toggle priority", listElement)
+    addTask("click checkbox once to check a task", listElement)
+    addTask("click checkbox twice to prompt deletion", listElement)
+    localStorage.setItem("example high priority task", `0`)
+    localStorage.setItem("example high priority taskpriority", `taskHighPriority`)
+    addTask("example high priority task", listElement, false)
 }
