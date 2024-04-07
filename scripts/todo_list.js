@@ -1,13 +1,35 @@
-loadTasks(document.getElementById("todoList"))
-loadDefaultTasks(document.getElementById("todoList"))
+const todoListElement = document.getElementById("todoList")
+loadTasks(todoListElement)
+loadDefaultTasks(todoListElement)
+sortTasksByPriority(todoListElement)
+
+
 function loadTasks(listElement){
+    // tasks are mapped: taskString -> "0" (incomplete, or) "1" (for complete)
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         const value = localStorage.getItem(key);
         if(value === "0" || value === "1"){
-            addTask(key, listElement, false)
+            // addTask with reset=false loads an existing task from localStorage
+                // reset=true creates a new task
+            addTask(key, listElement, reset=false)
         }
     }
+}
+function sortTasksByPriority(listElement){
+    // reads all the task divs into an array, sorts the arr, removes the tasks from the listElement,
+        // and re-adds them from the arr in sorted order
+    const priorities = ["taskDefaultPriority","taskLowPriority","taskMediumPriority","taskHighPriority"]
+    let tasksArr = Array.from(listElement.children)
+    tasksArr.sort((task1, task2)=>{
+        const task1Str = task1.querySelector(`span`).textContent
+        const task2Str = task2.querySelector(`span`).textContent
+        const task1Prio = localStorage.getItem(task1Str+"priority")
+        const task2Prio = localStorage.getItem(task2Str+"priority")
+        return priorities.indexOf(task1Prio) < priorities.indexOf(task2Prio)
+    })
+    listElement.innerHTML = ""
+    tasksArr.forEach(task => listElement.appendChild(task))
 }
 function addTask(taskString, listElement, reset=true){
     // create task checkbox
@@ -76,8 +98,7 @@ function addTask(taskString, listElement, reset=true){
         removeElement.checked = localStorage.getItem(taskString) === "1"
         divElement.classList.add(localStorage.getItem(taskString + "priority"))
     }
-
-}loadDefaultTasks
+}
 function uncheckAllTasks(listElement){
     if(!confirm("Are you sure you want to un-check all tasks?")){
         return;
@@ -109,7 +130,6 @@ function loadDefaultTasks(listElement){
     if(listElement.children.length > 0){
         return
     }
-
     // load some default tasks to show-case use
     addTask("click container to toggle priority", listElement)
     addTask("click checkbox once to check a task", listElement)
