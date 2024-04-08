@@ -64,7 +64,27 @@
                 background-color: rgba(139, 0, 0, 0.628);
                 color: white;
             }
-            
+            .sideNavBar{
+                top:0;
+                left:0;
+                margin-top: 5%;
+                margin-left: 5%;
+                width: 10%;
+                max-height: 90%;
+                position: fixed;
+                overflow-y: auto;
+            }
+            .sideNavBar > a {
+                display: block;
+                padding: 33px;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                font-size: 2em;
+            }
+            .sideNavBar > a:hover {
+                background-color: white;
+                color:black;
+            }
         </style>
     </head>
 
@@ -72,11 +92,21 @@
 
     <body>
         <navbar>
-            <a href="index.html">HOME</a>
+            <a href="index.html" id="home">HOME</a>
         </navbar>
+        <div class="sideNavBar">
+            <a href="#home">HOME</a>
+            <a href="#todoListContainer">TODO LIST</a>
+            <a href="#testGeneratorContainer">TEST GENERATOR</a>
+            <a href="#combinatoricsContainer">COMBINATORICS</a>
+            <a href="#inputSorterContainer">INPUT SORTER</a>
+            <a href="#fetchContainer">FETCH</a>
+            <a href="#websocketContainer">WEBSOCKET</a>
+            <a href="#linearAlgebraContainer">LINEAR ALGEBRA</a>
+        </div>
 
         <main>
-            <div>
+            <div id="todoListContainer">
                 <div>
                     <h1>TODO LIST</h1><br>
                     <input type="text" value="task" id="todoInput">
@@ -95,7 +125,7 @@
             </div>
 
 
-            <div class="test">
+            <div id="testGeneratorContainer" class="test">
                 <div>
                     <h1>TEST GENERATOR</h1><br>
                     DIMENSIONS<br>
@@ -132,7 +162,7 @@
             </div>
 
 
-            <div class="combinatorics">
+            <div id="combinatoricsContainer" class="combinatorics">
                 <div>
                     <h1>COMBINATORICS</h1><br>
                     <details>
@@ -164,7 +194,7 @@
             </div>
 
 
-            <div>
+            <div id="inputSorterContainer">
                 <h1>INPUT SORTER</h1><br>
                 compare(a, b)<br><input style="width:50%; text-align: center;" type="text" value="parseInt(a[0]) > parseInt(b[0]) || parseInt(a[0]) == parseInt(b[0]) && a[1].length > b[1].length" id="sortCompare" title="e.g. a>b or parseInt(a)>parseInt(b) or a[0] > b[0] or a.length < b.length etc"><br><br>
                 input<br><input type="text" value="[]" id="sortInput"><br><br>
@@ -181,7 +211,7 @@
             </div>
 
 
-            <div>
+            <div id="fetchContainer">
                 <h1>FETCH</h1><br>
                 TYPE
                 <select name="type" id="fetchType">

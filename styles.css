@@ -3,6 +3,7 @@
     color: white;     
     margin: 2px;
     font-family: Lucida Console;
+    border-radius: 0px;
 }
 body {
     text-align: center;
