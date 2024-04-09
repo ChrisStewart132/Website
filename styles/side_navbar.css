@@ -1,0 +1,25 @@
+.sideNavBar{
+    top:0;
+    left:0;
+    margin-top: 5%;
+    margin-left: 5%;
+    width: 10%;
+    max-height: 90%;
+    position: fixed;
+    overflow-y: auto;
+}
+.sideNavBar > a {
+    display: block;
+    padding: 33px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: 2em;
+}
+.sideNavBar > a:hover {
+    background-color: white;
+    color:black;
+}
+.sideNavBar > a.active {
+    background-color: white;
+    color: black;
+}
