@@ -1,3 +1,21 @@
+/*
+    <div id=home>home at top of page</div>
+    <div class="sideNavBar">
+        <a href="#home">HOME</a>
+        <a href="#section1">section1</a>
+        <a href="#section2">section2</a>
+    </div>
+    <main>
+        <div id="section1">
+            section1
+        </div>
+        <div id="section2">
+            section2 etc
+        </div>
+    </main>
+
+*/
+
 // Function to throttle events
 function throttle(callback, delay) {
     let timeoutId;
@@ -21,8 +39,7 @@ function throttle(callback, delay) {
 }
 
 
-// side navbar
-document.addEventListener('DOMContentLoaded', function() {
+function updateSideNavbar() {
     const navLinks = document.querySelectorAll('.sideNavBar > a ');
     // Function to update the active link
     function updateActiveLink() {
@@ -60,6 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Call updateActiveLink when the page loads and on scroll
     window.addEventListener('scroll', throttledUpdateActiveLink);
     throttledUpdateActiveLink();
-});
+}
 
+
+// side navbar
+document.addEventListener('DOMContentLoaded', updateSideNavbar);
 document.querySelector(".sideNavBar").children[0].classList.add('active');
