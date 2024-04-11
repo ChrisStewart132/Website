@@ -2,15 +2,81 @@
     <head>
         <link rel="icon" href="images/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <!-- Include the Highlight.js CSS file -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css">
+        <!-- Include the Highlight.js JavaScript file -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="styles/side_navbar.css">
         <title>HOME</title>
+        <style>
+            main > div{
+                border: 1px solid white;
+                margin: 20 20% 40 20%;
+                padding: 20px;
+                min-height: 500px;
+            }
+            pre {
+                display: block;
+                text-align: left;
+                margin: 10 13% 10 13%;
+                white-space: pre-wrap;
+            }
+            h1{
+                border: 0px solid white;
+            }
+            h1:hover{
+                background-color: white;
+                color: black;
+            }
+            .hljs {
+                background: none; /* Ignore the background applied by Highlight.js */
+            }
+        </style>
     </head>
     <body>
         <navbar>
             <a href="index.html">HOME</a>
         </navbar>
+        <div class="sideNavBar">
+            <a href="#home">HOME</a>
+            <a href="#unicodeWebsite">UNICODE WEBSITE</a>
+            <a href="#insertionSort">INSERTION SORT</a>
+            <a href="#countingSort">COUNTING SORT</a>
+            <a href="#mergeSort">MERGE SORT</a>
+            <a href="#quickSort">QUICK SORT</a>
+            <a href="#heapSort">HEAP SORT</a>
+            <a href="#binarySearch">BINARY SEARCH</a>
+            <a href="#priorityQueue">PRIORITY QUEUE</a>
+            <a href="#backTracking">BACKTRACKING</a>
+            <a href="#treeTraversal">TREE TRAVERSAL</a>
+        </div>
         <main>
-            <p>projects todo</p>
+            <div id="unicodeWebsite">
+                <h1>UNICODE WEBSITE</h1>
+                <p>
+                    description
+                </p>
+                <a>link1</a>
+                <div>
+                    <pre>
+                        <code>
+
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div id="aStarPathFinding">
+                aStarPathFinding
+            </div>
+            <div id="openCV">
+                openCV
+            </div>
+            <div id="bruteForceAttack">
+                bruteForceAttack
+            </div>
         </main>
+        <script src="scripts/side_navbar.js"></script>
     </body>
 </html>
