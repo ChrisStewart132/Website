@@ -1,8 +1,9 @@
+const TASK_CHECKED_OPACITY = '0.5';
+const TASK_UNCHECKED_OPACITY = '1.0';
 const todoListElement = document.getElementById("todoList")
 loadTasks(todoListElement)
 loadDefaultTasks(todoListElement)
 sortTasksByPriority(todoListElement)
-
 
 function loadTasks(listElement){
     // tasks are mapped: taskString -> "0" (incomplete, or) "1" (for complete)
@@ -29,7 +30,9 @@ function sortTasksByPriority(listElement){
         return priorities.indexOf(task1Prio) < priorities.indexOf(task2Prio)
     })
     listElement.innerHTML = ""
-    tasksArr.forEach(task => listElement.appendChild(task))
+    tasksArr.forEach(task => {
+        return listElement.appendChild(task);
+    })
 }
 function addTask(taskString, listElement, reset=true){
     // create task checkbox
@@ -40,6 +43,8 @@ function addTask(taskString, listElement, reset=true){
     removeElement.onclick = function(){
         if(!this.checked){// clicking unchecks it then it can be deleted
             localStorage.setItem(taskString, "0")
+            //this.parentElement.style.opacity = TASK_UNCHECKED_OPACITY;
+            this.parentElement.classList.remove(`transparent`)
             if(confirm("Remove task?")){
                 const taskElement = this.parentElement.querySelector(`span`)
                 localStorage.removeItem(taskString)
@@ -47,6 +52,8 @@ function addTask(taskString, listElement, reset=true){
             }
         }else{
             localStorage.setItem(taskString, "1")
+            //this.parentElement.style.opacity = TASK_CHECKED_OPACITY;
+            this.parentElement.classList.add(`transparent`)
         }
     };
     // create task text
@@ -96,6 +103,12 @@ function addTask(taskString, listElement, reset=true){
         localStorage.setItem(taskString + "priority", "taskDefaultPriority")
     }else{// loading a cached task
         removeElement.checked = localStorage.getItem(taskString) === "1"
+        if(removeElement.checked){
+            //divElement.style.opacity = TASK_UNCHECKED_OPACITY;
+            divElement.classList.add(`transparent`)
+        }else{
+            divElement.classList.remove(`transparent`)
+        }
         divElement.classList.add(localStorage.getItem(taskString + "priority"))
     }
 }
@@ -108,6 +121,8 @@ function uncheckAllTasks(listElement){
         const taskStr = taskDiv.querySelector(`span`).textContent
         checkbox.checked = false;
         localStorage.setItem(taskStr, "0")
+        //taskDiv.style.opacity = TASK_UNCHECKED_OPACITY;
+        taskDiv.classList.remove(`transparent`)
       }
 }
 function removeAllTasks(listElement){
