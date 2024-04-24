@@ -1,4 +1,4 @@
-#include <cstddef>
+#include <stddef.h>
 /*
     dfs recursive and iterative:
         pre-order, in-order, post-order traversal
@@ -14,11 +14,22 @@ struct node{
 };
 
 struct node* create_node(int val, struct node* left, struct node* right){
-    
+    struct node* node = malloc(sizeof(struct node));
+    node->val = val;
+    node->left = left;
+    node->right = right;
+    return node;
 }
-
+void free_node(struct node* node){
+    free(node);
+}
 void free_tree(struct node* root){
-
+    if(root == NULL){
+        return;
+    }
+    free_tree(root->left);
+    free_tree(root->right);
+    free_node(root);
 }
 
 void pre_order(struct node* root){
@@ -62,10 +73,23 @@ void pre_order_iterative(struct node* root, int size){
     free(stack);
 }
 
+void print_tree(struct node* root){
+    printf("");
+}
 
 
 int main(int argc, char** argv){
-    struct node* root = create_node(0, NULL, NULL);
+    struct node* l = create_node(0, NULL, NULL);
+    struct node* r = create_node(2, NULL, NULL);
+    struct node* root = create_node(1, l, r);
 
+    printf("\npre-order: ");
+    pre_order(root);
+    printf("\nin-order: ");
+    in_order(root);
+    printf("\npost-order: ");
+    post_order(root);
+
+    free_tree(root);
     return 0;
 }
