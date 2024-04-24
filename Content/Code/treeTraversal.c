@@ -1,18 +1,9 @@
 #include <stddef.h>
-/*
-    dfs recursive and iterative:
-        pre-order, in-order, post-order traversal
-    bfs iterative:
-        pre-order, in-order, post-order traversal
-    arr vs linked list:
-        heap, sorted list as a bst
-*/
 struct node{
     int val;
     struct node* left;
     struct node* right;
 };
-
 struct node* create_node(int val, struct node* left, struct node* right){
     struct node* node = malloc(sizeof(struct node));
     node->val = val;
@@ -31,7 +22,12 @@ void free_tree(struct node* root){
     free_tree(root->right);
     free_node(root);
 }
-
+int tree_size(struct node* root){
+    if(root == NULL){
+        return 0;
+    }
+    return 1 + tree_size(root->left) + tree_size(root->right);
+}
 void pre_order(struct node* root){
     if(root == NULL){
         return;
@@ -44,9 +40,9 @@ void in_order(struct node* root){
     if(root == NULL){
         return;
     }
-    post_order(root->left);
+    in_order(root->left);
     printf("%d, ", root->val);
-    post_order(root->right);
+    in_order(root->right);
 }
 void post_order(struct node* root){
     if(root == NULL){
@@ -56,32 +52,42 @@ void post_order(struct node* root){
     post_order(root->right);
     printf("%d, ", root->val);
 }
-
 void pre_order_iterative(struct node* root, int size){
-    struct node** stack = (struct node**)malloc(sizeof(struct node*)*size);
+    struct node** stack = (struct node**)calloc(sizeof(struct node*), size);
     int esp = 0;
     stack[esp++] = root;
-    while(esp >= 0){
+    while(esp > 0){
         struct node* current = stack[--esp];
-        if(current == NULL){
-            continue;
-        }
         printf("%d, ", current->val);
-        stack[esp++] = current->left;
-        stack[esp++] = current->right;
+        if(current->right != NULL){
+            stack[esp++] = current->right;
+        }
+        if(current->left != NULL){
+            stack[esp++] = current->left;
+        }
     }   
     free(stack);
 }
-
 void print_tree(struct node* root){
     printf("");
 }
-
+struct node* arr_to_tree(int* arr, int size){
+    return NULL;
+}
 
 int main(int argc, char** argv){
-    struct node* l = create_node(0, NULL, NULL);
-    struct node* r = create_node(2, NULL, NULL);
+    struct node* lll = create_node(-2, NULL, NULL);
+    struct node* ll = create_node(-1, lll, NULL);
+    struct node* l = create_node(0, ll, NULL);
+
+    struct node* rr = create_node(4, NULL, NULL);
+    struct node* rl = create_node(2, NULL, NULL);
+    struct node* r = create_node(3, rl, rr);
+
     struct node* root = create_node(1, l, r);
+
+    int size = tree_size(root);
+    printf("tree size:%d\n", size);
 
     printf("\npre-order: ");
     pre_order(root);
@@ -89,6 +95,10 @@ int main(int argc, char** argv){
     in_order(root);
     printf("\npost-order: ");
     post_order(root);
+
+    printf("\npre-order-iterative: ");
+    pre_order_iterative(root, size);
+
 
     free_tree(root);
     return 0;
