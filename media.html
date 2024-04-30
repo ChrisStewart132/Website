@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="styles/styles.css">
+        <title>MEDIA</title>
+
+        <style>
+            video {
+                width: auto;
+                height: 1080;
+            }
+            span {
+                border: 1px solid white;
+                padding: 10px;
+            }
+            span:hover {
+                background-color: white;
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <navbar>
+            <a href="index.html">HOME</a>
+        </navbar>
+        <main>
+            <div>
+                <span onclick=prevVideo()>prev</span>
+                <span id="video_index"></span>
+                <span onclick=nextVideo()>next</span>
+            </div>      
+            <video></video controls autoplay>
+        </main>
+    </body>
+    <script>
+        const n_files = 50;// no. of files in the dir in the format `file_${i}.mp4`
+        const video_element = document.querySelector(`video`);
+        const video_index_element = document.getElementById(`video_index`)
+        let video_index = 0;
+        
+        
+
+        // Function to load and play the specified file
+        function loadVideo(video_element) {
+            // Remove the previous 'ended' event listener
+            video_element.removeEventListener('ended', onVideoEnded);
+
+            // Update the src attribute with the file path
+            const path = `Content/Media/file_${(video_index%n_files)+1}.mp4`
+            console.log(path)
+            video_element.src = path;
+            video_element.controls = true;
+
+            // Load and play the video
+            video_element.load();
+            video_element.play();
+            
+            increment_video_index()
+
+            // Add event listener for 'ended' event
+            video_element.addEventListener('ended', onVideoEnded);
+        }
+
+        function onVideoEnded(){
+            loadVideo(video_element)
+        }
+
+        function updateVideoIndex(){
+            video_index_element.textContent = video_index.toString();
+            if(video_index == 0){
+                video_index_element.textContent = n_files.toString();
+            }
+        }
+        function increment_video_index(){
+            video_index++;
+            video_index%=n_files;
+            updateVideoIndex();
+        }
+        function decrement_video_index(){
+            video_index--;
+            video_index%=n_files;
+            updateVideoIndex();
+        }
+        function nextVideo(){
+            loadVideo(video_element)
+        }
+        function prevVideo(){
+            decrement_video_index()
+            decrement_video_index()
+            if(video_index < 0){
+                video_index += n_files;
+            }
+            updateVideoIndex()
+            loadVideo(video_element)
+        }
+
+        loadVideo(video_element);
+    </script>
+</html>
