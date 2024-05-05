@@ -68,6 +68,47 @@ void pre_order_iterative(struct node* root, int size){
     }   
     free(stack);
 }
+void in_order_iterative(struct node* root, int size){
+    struct node** stack = (struct node**)calloc(sizeof(struct node*), size);
+    int esp = 0;
+    stack[esp++] = root;
+    while(esp > 0){
+        struct node* current = stack[--esp];
+        if(current->left != NULL){
+            stack[esp++] = current->left;
+            continue;
+        }
+        printf("%d, ", current->val);
+        if(current->right != NULL){
+            stack[esp++] = current->right;
+        }
+    }   
+    free(stack);
+}
+void post_order_iterative(struct node* root, int size){
+    struct node** stack = (struct node**)calloc(sizeof(struct node*), size);
+    int esp = 0;
+    stack[esp++] = root;
+    while(esp > 0){
+        struct node* current = stack[esp-1];
+        if(current->left == NULL && current->right == NULL){// leaf
+            printf("%d, ", current->val);
+            esp--;
+            continue;
+        }
+        if(current->left != NULL){
+            stack[esp++] = current->left;
+            continue;
+        }
+        if(current->right != NULL){
+            stack[esp++] = current->right;
+            continue;
+        }
+        
+        
+    }   
+    free(stack);
+}
 void print_tree(struct node* root){
     printf("");
 }
@@ -96,8 +137,12 @@ int main(int argc, char** argv){
     printf("\npost-order: ");
     post_order(root);
 
-    printf("\npre-order-iterative: ");
-    pre_order_iterative(root, size);
+    //printf("\npre-order-iterative: ");
+    //pre_order_iterative(root, size);
+    //printf("\nin-order-iterative: ");
+    //in_order_iterative(root, size);
+    printf("\npost-order-iterative: ");
+    post_order_iterative(root, size);
 
 
     free_tree(root);

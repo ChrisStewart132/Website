@@ -1,2 +1,3 @@
 git_status.bat
 *.exe
+/Content/Media*
