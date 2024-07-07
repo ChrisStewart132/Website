@@ -63,6 +63,7 @@ void tree_append(struct node* head, int val) {
 
 void _tree_sort(struct node* head, int* unsorted_list, int size){
     static int i = 0;
+    i %= size;
     if(head == NULL){
         return;
     }
