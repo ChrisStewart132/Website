@@ -8,7 +8,7 @@
         <style>
             video {
                 width: auto;
-                height: 1080;
+                height: 80%;
             }
             span {
                 border: 1px solid white;
@@ -25,21 +25,21 @@
             <a href="index.html">HOME</a>
         </navbar>
         <main>
-            <audio controls>
-                <source src="Content/Media/audio.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-            <br>        
             <div>
                 <span onclick=prevVideo()>prev</span>
                 <span id="video_index"></span>
                 <span onclick=nextVideo()>next</span>
             </div>      
             <video></video controls autoplay>
+            <br> 
+            <audio controls>
+                <source src="Content/Media/audio.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>     
         </main>
     </body>
     <script>
-        const n_files = 55;// no. of files in the dir in the format `file_${i}.mp4`
+        const n_files = 57;// no. of files in the dir in the format `file_${i}.mp4`
         const video_element = document.querySelector(`video`);
         const video_index_element = document.getElementById(`video_index`)
         const audio_element = document.querySelector(`audio`);
