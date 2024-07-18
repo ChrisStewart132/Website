@@ -10,12 +10,30 @@
                 width: auto;
                 height: 80%;
             }
-            span {
+            span, .prev, .next {
                 border: 1px solid white;
                 padding: 10px;
             }
             span:hover {
                 background-color: white;
+                color: black;
+            }
+
+            .prev, .next{
+                position:fixed;
+                height: 100%;
+                width: 20%;
+                top:0%;
+                background-color: rgba(0,0,0,0);
+            }
+            .prev{
+                left: 0;
+            }
+            .next{
+                right: 0;
+            }
+            span:hover, .next:hover, .prev:hover {
+                background-color: rgba(255, 255, 255, 0.1);;
                 color: black;
             }
         </style>
@@ -26,20 +44,23 @@
         </navbar>
         <main>
             <div>
+                <p class="prev" onclick=prevVideo()>prev</p>
+                <video></video controls autoplay>
+                <p class="next" onclick=nextVideo()>next</p>
+            </div>
+            <div>
                 <span onclick=prevVideo()>prev</span>
                 <span id="video_index"></span>
                 <span onclick=nextVideo()>next</span>
-            </div>      
-            <video></video controls autoplay>
-            <br> 
+            </div>       
             <audio controls>
                 <source src="Content/Media/audio.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
-            </audio>     
+            </audio>
         </main>
     </body>
     <script>
-        const n_files = 57;// no. of files in the dir in the format `file_${i}.mp4`
+        const n_files = 71;// no. of files in the dir in the format `file_${i}.mp4`
         const video_element = document.querySelector(`video`);
         const video_index_element = document.getElementById(`video_index`)
         const audio_element = document.querySelector(`audio`);

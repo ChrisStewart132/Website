@@ -1,3 +1,5 @@
+#include <stdlib.h>//malloc
+#include <stdio.h>//printf
 #define type int
 struct stack{
     int i;
@@ -14,7 +16,7 @@ struct stack* create_stack(int size){
 void _resize_stack(struct stack* stack){
     printf("resizing stack: %d->%d\n", stack->size, stack->size*2);
     stack->size *= 2;
-    stack->data = (struct stack*)realloc(stack->data, stack->size*sizeof(type));
+    stack->data = (type*)realloc(stack->data, stack->size*sizeof(type));
 }
 void append_stack(struct stack* stack, type val){
     //printf("%d\n", val);
